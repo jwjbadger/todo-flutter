@@ -10,10 +10,6 @@ class Tasks extends StatefulWidget {
 }
 
 class _TasksState extends State<Tasks> {
-  // final List<Task> tasks = <Task>[
-  //   Task(id: '1', title: 'Hi', description: 'Say Hi', completed: false),
-  //   Task(id: '2', title: 'Hello', description: 'Another one', completed: true)
-  // ];
   final TaskService taskService = TaskService();
 
   @override
@@ -32,14 +28,36 @@ class _TasksState extends State<Tasks> {
                     itemCount: tasks.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Padding(
-                          padding: EdgeInsets.only(top: 3),
+                          padding: EdgeInsets.only(top: 3, left: 5, right: 5),
                           child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.0)),
+                                color: tasks[index].completed
+                                    ? Theme.of(context).accentColor
+                                    : Theme.of(context).unselectedWidgetColor,
+                              ),
                               height: 50,
-                              color: tasks[index].completed
-                                  ? Theme.of(context).accentColor
-                                  : Theme.of(context).unselectedWidgetColor,
-                              child: Center(
-                                  child: Text('${tasks[index].title}'))));
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 4),
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text('${tasks[index].title}',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                              color: Theme.of(context)
+                                                  .primaryColor)),
+                                      Text('${tasks[index].description}',
+                                          style: TextStyle(
+                                              fontStyle: FontStyle.italic,
+                                              fontSize: 10,
+                                              color: Theme.of(context)
+                                                  .primaryColor)),
+                                    ]),
+                              )));
                     });
               } else {
                 return CircularProgressIndicator();
