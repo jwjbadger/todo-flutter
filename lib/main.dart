@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_flutter/widgets/tasks.dart';
 
 void main() => runApp(TodoApp());
 
@@ -6,6 +7,7 @@ class TodoApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Todo App',
         theme: ThemeData(
           primaryColor: Color(0xFF45625D),
@@ -24,8 +26,8 @@ class PageHolder extends StatefulWidget {
 class _PageHolderState extends State<PageHolder> {
   int _currentNav = 0;
 
-  static const List<Widget> _widgets = <Widget>[
-    Text('Tasks'),
+  static List<Widget> _widgets = <Widget>[
+    Tasks(),
     Text('Projects'),
     Text('Settings')
   ];
