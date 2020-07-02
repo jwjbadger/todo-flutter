@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_flutter/models/task.dart';
 import 'package:todo_flutter/widgets/tasks.dart';
 
 void main() => runApp(TodoApp());

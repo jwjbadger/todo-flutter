@@ -1,13 +1,12 @@
-class Task {
-  String id;
-  String title;
-  String description;
-  bool completed;
+import 'package:flutter/foundation.dart';
 
-  Task(String id, String title, String description, bool completed) {
-    this.id = id;
-    this.title = title;
-    this.description = description;
-    this.completed = completed;
-  }
+class Task {
+  final String title;
+  final String description;
+  final bool completed;
+
+  Task(
+      {@required this.title,
+      @required this.description,
+      @required this.completed});
 }
