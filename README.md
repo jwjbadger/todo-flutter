@@ -1,16 +1,3 @@
-# todo_flutter
+# What Is This Project?
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+This project is built to go along with the [todo-angular](https://github.com/jwjbadger/todo-angular) and [todo-backend](https://github.com/jwjbadger/todo-backend/). It is supposed to teach me about Flutter as a mobile development framework. A little while ago, I tried working with Xcode and Swift, I feel like this project will teach me about other approaches to developing for mobile (especially since Flutter is cross-platform). I want to try Flutter with both IOS, and Android in order to experience exactly the purpose of flutter. This will also teach me about linking mobile applications to a backend (something I have only done once, with Firestore).
