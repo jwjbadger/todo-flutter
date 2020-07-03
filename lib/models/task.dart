@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 
 class Task {
-  final String title;
-  final String description;
-  final bool completed;
+  String title;
+  String description;
+  bool completed;
 
   Task(
       {@required this.title,

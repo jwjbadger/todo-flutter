@@ -21,7 +21,6 @@ class _TasksState extends State<Tasks> {
         body: FutureBuilder(
             future: taskService.getTasks(),
             builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
-              print(snapshot);
               if (snapshot.hasData) {
                 List<Task> tasks = snapshot.data.tasks;
                 return ListView.builder(
@@ -37,7 +36,6 @@ class _TasksState extends State<Tasks> {
                                     ? Theme.of(context).accentColor
                                     : Theme.of(context).unselectedWidgetColor,
                               ),
-                              height: 50,
                               child: Padding(
                                 padding: EdgeInsets.only(left: 4),
                                 child: Column(
@@ -56,11 +54,24 @@ class _TasksState extends State<Tasks> {
                                               fontSize: 10,
                                               color: Theme.of(context)
                                                   .primaryColor)),
+                                      Switch(
+                                          activeColor:
+                                              Theme.of(context).primaryColor,
+                                          value: tasks[index].completed,
+                                          onChanged: (bool newValue) {
+                                            setState(() {
+                                              tasks[index].completed = newValue;
+                                            });
+                                            taskService.toggleComplete(
+                                                user: snapshot.data,
+                                                index: index,
+                                                newValue: newValue);
+                                          })
                                     ]),
                               )));
                     });
               } else {
-                return CircularProgressIndicator();
+                return Center(child: CircularProgressIndicator());
               }
             }),
         floatingActionButton: FloatingActionButton(
