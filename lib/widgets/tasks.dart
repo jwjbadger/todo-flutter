@@ -11,19 +11,29 @@ class Tasks extends StatefulWidget {
 
 class _TasksState extends State<Tasks> {
   final TaskService taskService = TaskService();
+  final _title = TextEditingController();
+  final _description = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Task List'),
-        ),
-        body: FutureBuilder(
-            future: taskService.getTasks(),
-            builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
-              if (snapshot.hasData) {
-                List<Task> tasks = snapshot.data.tasks;
-                return ListView.builder(
+      appBar: AppBar(
+        title: const Text('Task List'),
+      ),
+      body: FutureBuilder(
+          future: taskService.getTasks(),
+          builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
+            if (snapshot.hasData) {
+              List<Task> tasks = snapshot.data.tasks;
+              return Scaffold(
+                floatingActionButton: FloatingActionButton(
+                  child: Icon(Icons.add),
+                  onPressed: () {
+                    _addNewTask(user: snapshot.data)
+                        .then((data) => setState(() {}));
+                  },
+                ),
+                body: ListView.builder(
                     itemCount: tasks.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Padding(
@@ -69,14 +79,69 @@ class _TasksState extends State<Tasks> {
                                           })
                                     ]),
                               )));
-                    });
-              } else {
-                return Center(child: CircularProgressIndicator());
-              }
-            }),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () {},
-        ));
+                    }),
+              );
+            } else {
+              return Center(child: CircularProgressIndicator());
+            }
+          }),
+    );
+  }
+
+  Future<void> _addNewTask({user: User}) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Create Task'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Task Title',
+                  ),
+                  controller: _title,
+                ),
+                TextField(
+                    decoration: InputDecoration(hintText: 'Task Description'),
+                    controller: _description)
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(
+                'Cancel',
+                style: TextStyle(color: Theme.of(context).primaryColor),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            RaisedButton(
+                child: Text('Add',
+                    style: TextStyle(color: Theme.of(context).primaryColor)),
+                onPressed: () {
+                  taskService.addTask(
+                      user: user,
+                      title: _title.text,
+                      description: _description.text);
+
+                  _title.clear();
+                  _description.clear();
+                  Navigator.of(context).pop();
+                },
+                color: Theme.of(context).accentColor),
+          ],
+        );
+      },
+    );
+  }
+
+  void dispose() {
+    _title.dispose();
+    _description.dispose();
+    super.dispose();
   }
 }

@@ -39,8 +39,29 @@ class TaskService {
     return user;
   }
 
-  Future<User> toggleComplete({user: User, index: int, newValue: bool}) async {
+  Future<void> toggleComplete({user: User, index: int, newValue: bool}) async {
     user.tasks[index].completed = newValue;
+    user.tasks.sort((a, b) => (a.completed ? 1 : 0) - (b.completed ? 1 : 0));
+    List encodedTasks = [];
+    for (var task in user.tasks) {
+      encodedTasks.add({
+        'title': task.title,
+        'description': task.description,
+        'completed': task.completed
+      });
+    }
+
+    http.Response res = await http.patch(rootUrl + 'users/' + user.id,
+        body: jsonEncode({'todos': encodedTasks}), headers: dataHeaders);
+  }
+
+  Future<void> addTask({user: User, title: String, description: String}) async {
+    user.tasks.add(Task(
+        title: title.isEmpty ? 'No Title' : title,
+        description: description.isEmpty ? 'No description' : description,
+        completed: false));
+    user.tasks.sort((a, b) => (a.completed ? 1 : 0) - (b.completed ? 1 : 0));
+
     List encodedTasks = [];
     for (var task in user.tasks) {
       encodedTasks.add({
