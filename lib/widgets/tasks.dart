@@ -64,19 +64,34 @@ class _TasksState extends State<Tasks> {
                                               fontSize: 10,
                                               color: Theme.of(context)
                                                   .primaryColor)),
-                                      Switch(
-                                          activeColor:
-                                              Theme.of(context).primaryColor,
-                                          value: tasks[index].completed,
-                                          onChanged: (bool newValue) {
-                                            setState(() {
-                                              tasks[index].completed = newValue;
-                                            });
-                                            taskService.toggleComplete(
-                                                user: snapshot.data,
-                                                index: index,
-                                                newValue: newValue);
-                                          })
+                                      Row(children: [
+                                        Switch(
+                                            activeColor:
+                                                Theme.of(context).primaryColor,
+                                            value: tasks[index].completed,
+                                            onChanged: (bool newValue) {
+                                              setState(() {
+                                                tasks[index].completed =
+                                                    newValue;
+                                              });
+                                              taskService.toggleComplete(
+                                                  user: snapshot.data,
+                                                  index: index,
+                                                  newValue: newValue);
+                                            }),
+                                        IconButton(
+                                            icon: Icon(Icons.delete_forever,
+                                                color: Theme.of(context)
+                                                    .primaryColor),
+                                            onPressed: () {
+                                              taskService
+                                                  .removeTask(
+                                                      user: snapshot.data,
+                                                      index: index)
+                                                  .then((data) =>
+                                                      setState(() {}));
+                                            })
+                                      ])
                                     ]),
                               )));
                     }),

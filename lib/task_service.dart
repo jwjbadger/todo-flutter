@@ -39,31 +39,46 @@ class TaskService {
     return user;
   }
 
-  Future<void> toggleComplete({user: User, index: int, newValue: bool}) async {
+  Future<String> toggleComplete(
+      {user: User, index: int, newValue: bool}) async {
     user.tasks[index].completed = newValue;
     user.tasks.sort((a, b) => (a.completed ? 1 : 0) - (b.completed ? 1 : 0));
-    List encodedTasks = [];
-    for (var task in user.tasks) {
-      encodedTasks.add({
-        'title': task.title,
-        'description': task.description,
-        'completed': task.completed
-      });
-    }
+
+    List encodedTasks = encodeTask(tasks: user.tasks);
 
     http.Response res = await http.patch(rootUrl + 'users/' + user.id,
         body: jsonEncode({'todos': encodedTasks}), headers: dataHeaders);
+    return res.body;
   }
 
-  Future<void> addTask({user: User, title: String, description: String}) async {
+  Future<String> addTask(
+      {user: User, title: String, description: String}) async {
     user.tasks.add(Task(
         title: title.isEmpty ? 'No Title' : title,
         description: description.isEmpty ? 'No description' : description,
         completed: false));
     user.tasks.sort((a, b) => (a.completed ? 1 : 0) - (b.completed ? 1 : 0));
 
+    List encodedTasks = encodeTask(tasks: user.tasks);
+
+    http.Response res = await http.patch(rootUrl + 'users/' + user.id,
+        body: jsonEncode({'todos': encodedTasks}), headers: dataHeaders);
+    return res.body;
+  }
+
+  Future<String> removeTask({user: User, index: int}) async {
+    user.tasks.removeAt(index);
+
+    List encodedTasks = encodeTask(tasks: user.tasks);
+
+    http.Response res = await http.patch(rootUrl + 'users/' + user.id,
+        body: jsonEncode({'todos': encodedTasks}), headers: dataHeaders);
+    return res.body;
+  }
+
+  List encodeTask({tasks: List}) {
     List encodedTasks = [];
-    for (var task in user.tasks) {
+    for (var task in tasks) {
       encodedTasks.add({
         'title': task.title,
         'description': task.description,
@@ -71,7 +86,6 @@ class TaskService {
       });
     }
 
-    http.Response res = await http.patch(rootUrl + 'users/' + user.id,
-        body: jsonEncode({'todos': encodedTasks}), headers: dataHeaders);
+    return encodedTasks;
   }
 }
