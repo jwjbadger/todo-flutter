@@ -76,6 +76,18 @@ class TaskService {
     return res.body;
   }
 
+  Future<String> editTask(
+      {user: User, title: String, description: String, index: int}) async {
+    user.tasks[index].title = title;
+    user.tasks[index].description = description;
+
+    List encodedTasks = encodeTask(tasks: user.tasks);
+
+    http.Response res = await http.patch(rootUrl + 'users/' + user.id,
+        body: jsonEncode({'todos': encodedTasks}), headers: dataHeaders);
+    return res.body;
+  }
+
   List encodeTask({tasks: List}) {
     List encodedTasks = [];
     for (var task in tasks) {

@@ -90,7 +90,30 @@ class _TasksState extends State<Tasks> {
                                                       index: index)
                                                   .then((data) =>
                                                       setState(() {}));
-                                            })
+                                            }),
+                                        IconButton(
+                                          icon: Icon(Icons.edit,
+                                              color: Theme.of(context)
+                                                  .primaryColor),
+                                          onPressed: () {
+                                            final _newTitle =
+                                                TextEditingController(
+                                                    text: tasks[index].title);
+                                            final _newDescription =
+                                                TextEditingController(
+                                                    text: tasks[index]
+                                                        .description);
+
+                                            _editTask(
+                                                    user: snapshot.data,
+                                                    newTitle: _newTitle,
+                                                    newDescription:
+                                                        _newDescription,
+                                                    index: index)
+                                                .then(
+                                                    (data) => setState(() {}));
+                                          },
+                                        )
                                       ])
                                     ]),
                               )));
@@ -145,6 +168,60 @@ class _TasksState extends State<Tasks> {
 
                   _title.clear();
                   _description.clear();
+                  Navigator.of(context).pop();
+                },
+                color: Theme.of(context).accentColor),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _editTask(
+      {user: User,
+      newTitle: TextEditingController,
+      newDescription: TextEditingController,
+      index: int}) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Edit Task'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Task Title',
+                  ),
+                  controller: newTitle,
+                ),
+                TextField(controller: newDescription)
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(
+                'Cancel',
+                style: TextStyle(color: Theme.of(context).primaryColor),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            RaisedButton(
+                child: Text('Submit',
+                    style: TextStyle(color: Theme.of(context).primaryColor)),
+                onPressed: () {
+                  taskService.editTask(
+                      user: user,
+                      title: newTitle.text,
+                      description: newDescription.text,
+                      index: index);
+
+                  newTitle.clear();
+                  newDescription.clear();
                   Navigator.of(context).pop();
                 },
                 color: Theme.of(context).accentColor),
