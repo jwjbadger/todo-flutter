@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_flutter/task_service.dart';
 import 'package:todo_flutter/widgets/page_holder.dart';
 
 class Login extends StatefulWidget {
@@ -7,6 +8,8 @@ class Login extends StatefulWidget {
 }
 
 class _Login extends State<Login> {
+  final TaskService taskService = TaskService();
+
   final _username = TextEditingController();
   final _password = TextEditingController();
 
@@ -59,13 +62,21 @@ class _Login extends State<Login> {
                       style: TextStyle(color: Theme.of(context).primaryColor)),
                   color: Theme.of(context).accentColor,
                   onPressed: () {
-                    _username.clear();
-                    _password.clear();
-                    Navigator.push(
-                      context,
-                      new MaterialPageRoute(
-                          builder: (context) => new PageHolder()),
-                    );
+                    taskService
+                        .login(
+                            username: _username.text, password: _password.text)
+                        .then((data) => {
+                              if (data['err'] == null)
+                                {
+                                  _username.clear(),
+                                  _password.clear(),
+                                  Navigator.push(
+                                    context,
+                                    new MaterialPageRoute(
+                                        builder: (context) => new PageHolder()),
+                                  ),
+                                }
+                            });
                   }),
             ),
           ],

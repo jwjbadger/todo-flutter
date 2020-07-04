@@ -88,6 +88,13 @@ class TaskService {
     return res.body;
   }
 
+  Future<Map> login({username: String, password: String}) async {
+    http.Response res = await http.post(rootUrl + 'users/login',
+        body: jsonEncode({'name': username, 'password': password}),
+        headers: dataHeaders);
+    return jsonDecode(res.body);
+  }
+
   List encodeTask({tasks: List}) {
     List encodedTasks = [];
     for (var task in tasks) {
