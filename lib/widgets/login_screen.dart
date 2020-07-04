@@ -46,13 +46,24 @@ class _Login extends State<Login> {
                       style: TextStyle(color: Theme.of(context).primaryColor)),
                   color: Theme.of(context).accentColor,
                   onPressed: () {
-                    _username.clear();
-                    _password.clear();
-                    Navigator.push(
-                      context,
-                      new MaterialPageRoute(
-                          builder: (context) => new PageHolder()),
-                    );
+                    taskService
+                        .register(
+                            username: _username.text, password: _password.text)
+                        .then((data) {
+                      if (data['err'] == null) {
+                        _username.clear();
+                        _password.clear();
+                        Navigator.push(
+                          context,
+                          new MaterialPageRoute(
+                              builder: (context) => new PageHolder()),
+                        );
+                      } else {
+                        _alertUser(msg: data['err']);
+                        _password.clear();
+                        _username.clear();
+                      }
+                    });
                   }),
             ),
             Padding(
@@ -65,23 +76,20 @@ class _Login extends State<Login> {
                     taskService
                         .login(
                             username: _username.text, password: _password.text)
-                        .then((data) => {
-                              if (data['err'] == null)
-                                {
-                                  _username.clear(),
-                                  _password.clear(),
-                                  Navigator.push(
-                                    context,
-                                    new MaterialPageRoute(
-                                        builder: (context) => new PageHolder()),
-                                  ),
-                                }
-                              else
-                                {
-                                  _alertUser(msg: data['err']),
-                                  _password.clear(),
-                                }
-                            });
+                        .then((data) {
+                      if (data['err'] == null) {
+                        _username.clear();
+                        _password.clear();
+                        Navigator.push(
+                          context,
+                          new MaterialPageRoute(
+                              builder: (context) => new PageHolder()),
+                        );
+                      } else {
+                        _alertUser(msg: data['err']);
+                        _password.clear();
+                      }
+                    });
                   }),
             ),
           ],
@@ -95,7 +103,7 @@ class _Login extends State<Login> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Just letting you know...'),
+          title: Text('Oh No!'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[

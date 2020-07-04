@@ -117,11 +117,25 @@ class TaskService {
     return res.body;
   }
 
-  Future<Map> login({username: String, password: String}) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future<Map> register({username: String, password: String}) async {
     final Map<String, String> dataHeaders = {
-      "auth-token": prefs.getString('jwt') ??
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZWZiMzNhY2M4ZDdkZTM2MWM5NzMzMTAiLCJpYXQiOjE1OTM1MzkxOTd9.NKBNTz08TQzw6irKVOcliEcWV42F5pfTBWvlm7MEwvI",
+      "content-type": "application/json"
+    };
+
+    http.Response res = await http.post(rootUrl + 'users/register',
+        body: jsonEncode({'name': username, 'password': password}),
+        headers: dataHeaders);
+    final decodedRes = jsonDecode(res.body);
+
+    if (decodedRes['err'] == null) {
+      return login(username: username, password: password);
+    } else {
+      return decodedRes;
+    }
+  }
+
+  Future<Map> login({username: String, password: String}) async {
+    final Map<String, String> dataHeaders = {
       "content-type": "application/json"
     };
 
