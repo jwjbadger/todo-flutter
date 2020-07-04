@@ -68,6 +68,7 @@ class _Login extends State<Login> {
                         .then((data) => {
                               if (data['err'] == null)
                                 {
+                                  _alertUser(msg: 'Success! Logged in...'),
                                   _username.clear(),
                                   _password.clear(),
                                   Navigator.push(
@@ -76,12 +77,43 @@ class _Login extends State<Login> {
                                         builder: (context) => new PageHolder()),
                                   ),
                                 }
+                              else
+                                {
+                                  _alertUser(msg: data['err']),
+                                  _password.clear(),
+                                }
                             });
                   }),
             ),
           ],
         ),
       ]),
+    );
+  }
+
+  Future<void> _alertUser({msg: String}) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Just letting you know...'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(msg),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
