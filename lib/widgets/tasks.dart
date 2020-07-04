@@ -17,9 +17,7 @@ class _TasksState extends State<Tasks> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Task List'),
-      ),
+      appBar: AppBar(title: const Text('Task List')),
       body: FutureBuilder(
           future: taskService.getTasks(),
           builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
