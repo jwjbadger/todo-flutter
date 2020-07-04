@@ -68,7 +68,6 @@ class _Login extends State<Login> {
                         .then((data) => {
                               if (data['err'] == null)
                                 {
-                                  _alertUser(msg: 'Success! Logged in...'),
                                   _username.clear(),
                                   _password.clear(),
                                   Navigator.push(

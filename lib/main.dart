@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo_flutter/widgets/login_screen.dart';
+import 'package:todo_flutter/widgets/page_holder.dart';
 
 void main() => runApp(TodoApp());
 
@@ -14,6 +16,16 @@ class TodoApp extends StatelessWidget {
           unselectedWidgetColor: Color(0xFF6AA5A9),
           accentColor: Color(0xFFA3D2D5),
         ),
-        home: Login());
+        home: FutureBuilder<SharedPreferences>(
+            future: SharedPreferences.getInstance(),
+            builder: (BuildContext context,
+                AsyncSnapshot<SharedPreferences> snapshot) {
+              if (snapshot.hasData) {
+                return snapshot.data.getString('jwt') == null
+                    ? Login()
+                    : PageHolder();
+              }
+              return Center(child: CircularProgressIndicator());
+            }));
   }
 }
