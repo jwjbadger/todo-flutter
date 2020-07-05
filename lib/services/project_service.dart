@@ -33,6 +33,7 @@ class ProjectService {
       }
 
       decodedProjects.add(Project(
+          id: project['_id'],
           title: project['title'],
           description: project['description'],
           users: project['users'],
@@ -41,4 +42,41 @@ class ProjectService {
 
     return decodedProjects;
   }
+
+  Future<String> toggleComplete({taskIndex: int, project: Project}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    final Map<String, String> dataHeaders = {
+      "auth-token": prefs.getString('jwt') ??
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZWZiMzNhY2M4ZDdkZTM2MWM5NzMzMTAiLCJpYXQiOjE1OTM1MzkxOTd9.NKBNTz08TQzw6irKVOcliEcWV42F5pfTBWvlm7MEwvI",
+      "content-type": "application/json"
+    };
+
+    final newTasks = encodeTask(tasks: project.tasks);
+    newTasks[taskIndex].completed = !newTasks[taskIndex].completed;
+
+    http.Response res = await http.put(rootUrl + 'projects/' + project.id,
+        body: jsonEncode({
+          '_id': project.id,
+          'title': project.title,
+          'description': project.description,
+          'users': project.users,
+          'tasks': newTasks
+        }),
+        headers: dataHeaders);
+    return res.body;
+  }
+}
+
+List encodeTask({tasks: List}) {
+  List encodedTasks = [];
+  for (var task in tasks) {
+    encodedTasks.add({
+      'title': task.title,
+      'description': task.description,
+      'completed': task.completed
+    });
+  }
+
+  return encodedTasks;
 }
