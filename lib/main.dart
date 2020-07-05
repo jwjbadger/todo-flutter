@@ -12,10 +12,10 @@ class TodoApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Todo App',
         theme: ThemeData(
-          primaryColor: Color(0xFF45625D),
-          unselectedWidgetColor: Color(0xFF6AA5A9),
-          accentColor: Color(0xFFA3D2D5),
-        ),
+            primaryColor: Color(0xFF45625D),
+            unselectedWidgetColor: Color(0xFF6AA5A9),
+            accentColor: Color(0xFFA3D2D5),
+            focusColor: Color(0xFF3F7856)),
         home: FutureBuilder<SharedPreferences>(
             future: SharedPreferences.getInstance(),
             builder: (BuildContext context,

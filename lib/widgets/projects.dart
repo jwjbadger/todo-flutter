@@ -49,7 +49,48 @@ class _Projects extends State<Projects> {
                                               fontStyle: FontStyle.italic,
                                               fontSize: 10,
                                               color: Theme.of(context)
-                                                  .primaryColor))
+                                                  .primaryColor)),
+                                      ListView.builder(
+                                        scrollDirection: Axis.vertical,
+                                        shrinkWrap: true,
+                                        itemCount: projects[index].tasks.length,
+                                        itemBuilder: (BuildContext context,
+                                            int taskIndex) {
+                                          return Row(children: [
+                                            Padding(
+                                              padding:
+                                                  EdgeInsets.only(right: 50),
+                                              child: Text(
+                                                  projects[index]
+                                                      .tasks[taskIndex]
+                                                      .title,
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: projects[index]
+                                                              .tasks[taskIndex]
+                                                              .completed
+                                                          ? Theme.of(context)
+                                                              .primaryColor
+                                                          : Theme.of(context)
+                                                              .focusColor)),
+                                            ),
+                                            Text(
+                                                projects[index]
+                                                    .tasks[taskIndex]
+                                                    .description,
+                                                style: TextStyle(
+                                                    fontStyle: FontStyle.italic,
+                                                    color: projects[index]
+                                                            .tasks[taskIndex]
+                                                            .completed
+                                                        ? Theme.of(context)
+                                                            .primaryColor
+                                                        : Theme.of(context)
+                                                            .focusColor)),
+                                          ]);
+                                        },
+                                      )
                                     ],
                                   ),
                                 )),
