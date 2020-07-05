@@ -92,6 +92,20 @@ class ProjectService {
         headers: dataHeaders);
     return res.body;
   }
+
+  Future<String> deleteProject({projectId: String}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    final Map<String, String> dataHeaders = {
+      "auth-token": prefs.getString('jwt') ??
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZWZiMzNhY2M4ZDdkZTM2MWM5NzMzMTAiLCJpYXQiOjE1OTM1MzkxOTd9.NKBNTz08TQzw6irKVOcliEcWV42F5pfTBWvlm7MEwvI",
+      "content-type": "application/json"
+    };
+
+    http.Response res = await http.delete(rootUrl + 'projects/' + projectId,
+        headers: dataHeaders);
+    return res.body;
+  }
 }
 
 List encodeTask({tasks: List}) {

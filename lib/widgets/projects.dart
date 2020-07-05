@@ -38,12 +38,28 @@ class _Projects extends State<Projects> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(projects[index].title,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18,
-                                              color: Theme.of(context)
-                                                  .primaryColor)),
+                                      Row(
+                                        children: [
+                                          Text(projects[index].title,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 18,
+                                                  color: Theme.of(context)
+                                                      .primaryColor)),
+                                          IconButton(
+                                              icon: Icon(Icons.delete_forever,
+                                                  color: Theme.of(context)
+                                                      .primaryColor),
+                                              onPressed: () {
+                                                projectService
+                                                    .deleteProject(
+                                                        projectId:
+                                                            projects[index].id)
+                                                    .then((value) =>
+                                                        setState(() {}));
+                                              })
+                                        ],
+                                      ),
                                       Text(projects[index].description,
                                           style: TextStyle(
                                               fontStyle: FontStyle.italic,
