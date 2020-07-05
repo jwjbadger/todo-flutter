@@ -21,7 +21,40 @@ class _Projects extends State<Projects> {
                 (BuildContext context, AsyncSnapshot<List<Project>> snapshot) {
               if (snapshot.hasData) {
                 List<Project> projects = snapshot.data;
-                return Scaffold(body: Text(projects.toString()));
+                return Scaffold(
+                    body: ListView.builder(
+                        itemCount: projects.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Padding(
+                            padding: EdgeInsets.only(left: 6, right: 6, top: 6),
+                            child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10.0)),
+                                    color: Theme.of(context).accentColor),
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 4),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(projects[index].title,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 18,
+                                              color: Theme.of(context)
+                                                  .primaryColor)),
+                                      Text(projects[index].description,
+                                          style: TextStyle(
+                                              fontStyle: FontStyle.italic,
+                                              fontSize: 10,
+                                              color: Theme.of(context)
+                                                  .primaryColor))
+                                    ],
+                                  ),
+                                )),
+                          );
+                        }));
               }
               return Center(child: CircularProgressIndicator());
             }));
