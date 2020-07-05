@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_flutter/widgets/projects.dart';
 import 'package:todo_flutter/widgets/tasks.dart';
 
 class PageHolder extends StatefulWidget {
@@ -11,7 +12,7 @@ class _PageHolderState extends State<PageHolder> {
 
   static List<Widget> _widgets = <Widget>[
     Tasks(),
-    Text('Projects'),
+    Projects(),
     Text('Settings')
   ];
 

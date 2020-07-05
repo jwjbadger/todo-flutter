@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todo_flutter/models/task.dart';
 import 'package:todo_flutter/models/user.dart';
 
-import 'package:todo_flutter/task_service.dart';
+import 'package:todo_flutter/services/task_service.dart';
 
 class Tasks extends StatefulWidget {
   @override

@@ -36,6 +36,7 @@ class TaskService {
         name: data['name'],
         password: data['password'],
         tasks: tasks);
+    prefs.setString('uid', user.name);
 
     return user;
   }
