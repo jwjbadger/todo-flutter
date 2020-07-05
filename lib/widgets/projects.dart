@@ -97,7 +97,20 @@ class _Projects extends State<Projects> {
                                                     .then((value) =>
                                                         setState(() {}));
                                               },
-                                            )
+                                            ),
+                                            IconButton(
+                                                icon: Icon(Icons.delete_forever,
+                                                    color: Theme.of(context)
+                                                        .primaryColor),
+                                                onPressed: () {
+                                                  projectService
+                                                      .deleteTask(
+                                                          taskIndex: taskIndex,
+                                                          project:
+                                                              projects[index])
+                                                      .then((value) =>
+                                                          setState(() {}));
+                                                })
                                           ]);
                                         },
                                       )
