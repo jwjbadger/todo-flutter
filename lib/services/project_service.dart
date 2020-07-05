@@ -53,7 +53,9 @@ class ProjectService {
     };
 
     final newTasks = encodeTask(tasks: project.tasks);
-    newTasks[taskIndex].completed = !newTasks[taskIndex].completed;
+    newTasks[taskIndex]['completed'] = !newTasks[taskIndex]['completed'];
+    newTasks
+        .sort((a, b) => (a['completed'] ? 1 : 0) - (b['completed'] ? 1 : 0));
 
     http.Response res = await http.put(rootUrl + 'projects/' + project.id,
         body: jsonEncode({
@@ -61,7 +63,7 @@ class ProjectService {
           'title': project.title,
           'description': project.description,
           'users': project.users,
-          'tasks': newTasks
+          'todos': newTasks
         }),
         headers: dataHeaders);
     return res.body;

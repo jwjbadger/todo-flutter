@@ -56,38 +56,48 @@ class _Projects extends State<Projects> {
                                         itemCount: projects[index].tasks.length,
                                         itemBuilder: (BuildContext context,
                                             int taskIndex) {
+                                          final currentTask =
+                                              projects[index].tasks[taskIndex];
                                           return Row(children: [
                                             Padding(
                                               padding:
                                                   EdgeInsets.only(right: 50),
-                                              child: Text(
-                                                  projects[index]
-                                                      .tasks[taskIndex]
-                                                      .title,
+                                              child: Text(currentTask.title,
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
-                                                      color: projects[index]
-                                                              .tasks[taskIndex]
+                                                      color: currentTask
                                                               .completed
                                                           ? Theme.of(context)
                                                               .primaryColor
                                                           : Theme.of(context)
                                                               .focusColor)),
                                             ),
-                                            Text(
-                                                projects[index]
-                                                    .tasks[taskIndex]
-                                                    .description,
+                                            Text(currentTask.description,
                                                 style: TextStyle(
                                                     fontStyle: FontStyle.italic,
-                                                    color: projects[index]
-                                                            .tasks[taskIndex]
-                                                            .completed
+                                                    color: currentTask.completed
                                                         ? Theme.of(context)
                                                             .primaryColor
                                                         : Theme.of(context)
                                                             .focusColor)),
+                                            IconButton(
+                                              icon: Icon(
+                                                  currentTask.completed
+                                                      ? Icons.refresh
+                                                      : Icons.check,
+                                                  color: Theme.of(context)
+                                                      .primaryColor),
+                                              onPressed: () {
+                                                projectService
+                                                    .toggleComplete(
+                                                        taskIndex: taskIndex,
+                                                        project:
+                                                            projects[index])
+                                                    .then((value) =>
+                                                        setState(() {}));
+                                              },
+                                            )
                                           ]);
                                         },
                                       )
