@@ -179,6 +179,31 @@ class ProjectService {
         headers: dataHeaders);
     return res.body;
   }
+
+  Future<String> createTask(
+      {newTitle: String, newDescription: String, project: Project}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    final Map<String, String> dataHeaders = {
+      "auth-token": prefs.getString('jwt') ??
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZWZiMzNhY2M4ZDdkZTM2MWM5NzMzMTAiLCJpYXQiOjE1OTM1MzkxOTd9.NKBNTz08TQzw6irKVOcliEcWV42F5pfTBWvlm7MEwvI",
+      "content-type": "application/json"
+    };
+
+    project.tasks.add(
+        Task(title: newTitle, description: newDescription, completed: false));
+    project.tasks.sort((a, b) => (a.completed ? 1 : 0) - (b.completed ? 1 : 0));
+
+    http.Response res = await http.put(rootUrl + 'projects/' + project.id,
+        body: jsonEncode({
+          'title': project.title,
+          'description': project.description,
+          'users': project.users,
+          'todos': encodeTask(tasks: project.tasks)
+        }),
+        headers: dataHeaders);
+    return res.body;
+  }
 }
 
 List encodeTask({tasks: List}) {

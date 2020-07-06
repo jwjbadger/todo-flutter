@@ -196,7 +196,11 @@ class _TasksState extends State<Tasks> {
                   ),
                   controller: newTitle,
                 ),
-                TextField(controller: newDescription)
+                TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Task description',
+                    ),
+                    controller: newDescription)
               ],
             ),
           ),

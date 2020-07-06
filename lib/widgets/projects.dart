@@ -124,6 +124,31 @@ class _Projects extends State<Projects> {
                                                 setState(() {});
                                               });
                                             },
+                                          ),
+                                          IconButton(
+                                            icon: Icon(Icons.add_circle,
+                                                color: Theme.of(context)
+                                                    .primaryColor),
+                                            onPressed: () {
+                                              TextEditingController _newTitle =
+                                                  TextEditingController();
+                                              TextEditingController
+                                                  _newDescription =
+                                                  TextEditingController();
+
+                                              _addOrEditTask(
+                                                      newTitle: _newTitle,
+                                                      newDescription:
+                                                          _newDescription,
+                                                      editing: false,
+                                                      project: projects[index],
+                                                      taskIndex: null)
+                                                  .then(
+                                                (value) {
+                                                  setState(() {});
+                                                },
+                                              );
+                                            },
                                           )
                                         ],
                                       ),
@@ -339,7 +364,11 @@ class _Projects extends State<Projects> {
                   ),
                   controller: newTitle,
                 ),
-                TextField(controller: newDescription)
+                TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Task description',
+                    ),
+                    controller: newDescription)
               ],
             ),
           ),
@@ -359,12 +388,21 @@ class _Projects extends State<Projects> {
                 onPressed: () {
                   if (editing) {
                     projectService.editTask(
-                        title: newTitle.text,
-                        description: newDescription.text,
+                        title:
+                            newTitle.text.isEmpty ? 'No Title' : newTitle.text,
+                        description: newDescription.text.isEmpty
+                            ? 'No description'
+                            : newDescription.text,
                         project: project,
                         taskIndex: taskIndex);
                   } else {
-                    print('Creating task...');
+                    projectService.createTask(
+                        newTitle:
+                            newTitle.text.isEmpty ? 'No Title' : newTitle.text,
+                        newDescription: newDescription.text.isEmpty
+                            ? 'No description'
+                            : newDescription.text,
+                        project: project);
                   }
 
                   newTitle.clear();
