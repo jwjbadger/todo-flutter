@@ -22,6 +22,27 @@ class _Projects extends State<Projects> {
               if (snapshot.hasData) {
                 List<Project> projects = snapshot.data;
                 return Scaffold(
+                    floatingActionButton: FloatingActionButton(
+                        onPressed: () {
+                          TextEditingController _newProjectTitle =
+                              TextEditingController();
+                          TextEditingController _newProjectDescription =
+                              TextEditingController();
+                          TextEditingController _newProjectUsers =
+                              TextEditingController();
+
+                          _addOrEditProjects(
+                                  newTitle: _newProjectTitle,
+                                  newDescription: _newProjectDescription,
+                                  newUsers: _newProjectUsers,
+                                  editing: false,
+                                  tasks: null,
+                                  id: null)
+                              .then((value) {
+                            setState(() {});
+                          });
+                        },
+                        child: Icon(Icons.add)),
                     body: ListView.builder(
                         itemCount: projects.length,
                         itemBuilder: (BuildContext context, int index) {
@@ -249,7 +270,18 @@ class _Projects extends State<Projects> {
                     newUsers.clear();
                     Navigator.of(context).pop();
                   } else {
-                    print('creating project....');
+                    projectService.createProject(
+                        title:
+                            newTitle.text.isEmpty ? 'No Title' : newTitle.text,
+                        description: newDescription.text.isEmpty
+                            ? 'No Title'
+                            : newDescription.text,
+                        users: newUsers.text.split(', '));
+
+                    newTitle.clear();
+                    newDescription.clear();
+                    newUsers.clear();
+                    Navigator.of(context).pop();
                   }
                 },
                 color: Theme.of(context).accentColor),
