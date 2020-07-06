@@ -240,7 +240,7 @@ class _Projects extends State<Projects> {
                     projectService.editProject(
                         title: newTitle.text,
                         description: newDescription.text,
-                        users: newUsers.text.split(','),
+                        users: newUsers.text.split(', '),
                         tasks: tasks,
                         id: id);
 
