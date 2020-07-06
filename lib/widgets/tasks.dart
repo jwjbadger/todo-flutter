@@ -27,7 +27,7 @@ class _TasksState extends State<Tasks> {
               List<Task> tasks = snapshot.data.tasks;
               return Scaffold(
                 floatingActionButton: FloatingActionButton(
-                  child: Icon(Icons.add),
+                  child: Icon(Icons.add, color: Theme.of(context).primaryColor),
                   onPressed: () {
                     _addNewTask(user: snapshot.data)
                         .then((data) => setState(() {}));

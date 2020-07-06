@@ -42,7 +42,8 @@ class _Projects extends State<Projects> {
                             setState(() {});
                           });
                         },
-                        child: Icon(Icons.add)),
+                        child: Icon(Icons.add,
+                            color: Theme.of(context).primaryColor)),
                     body: ListView.builder(
                         itemCount: projects.length,
                         itemBuilder: (BuildContext context, int index) {
@@ -184,18 +185,51 @@ class _Projects extends State<Projects> {
                                               },
                                             ),
                                             IconButton(
-                                                icon: Icon(Icons.delete_forever,
-                                                    color: Theme.of(context)
-                                                        .primaryColor),
-                                                onPressed: () {
-                                                  projectService
-                                                      .deleteTask(
-                                                          taskIndex: taskIndex,
-                                                          project:
-                                                              projects[index])
-                                                      .then((value) =>
-                                                          setState(() {}));
-                                                })
+                                              icon: Icon(Icons.delete_forever,
+                                                  color: Theme.of(context)
+                                                      .primaryColor),
+                                              onPressed: () {
+                                                projectService
+                                                    .deleteTask(
+                                                        taskIndex: taskIndex,
+                                                        project:
+                                                            projects[index])
+                                                    .then((value) =>
+                                                        setState(() {}));
+                                              },
+                                            ),
+                                            IconButton(
+                                              icon: Icon(Icons.edit,
+                                                  color: Theme.of(context)
+                                                      .primaryColor),
+                                              onPressed: () {
+                                                TextEditingController
+                                                    _newTitle =
+                                                    TextEditingController(
+                                                        text: projects[index]
+                                                            .tasks[taskIndex]
+                                                            .title);
+                                                TextEditingController
+                                                    _newDescription =
+                                                    TextEditingController(
+                                                        text: projects[index]
+                                                            .tasks[taskIndex]
+                                                            .description);
+                                                _addOrEditTask(
+                                                        newTitle: _newTitle,
+                                                        newDescription:
+                                                            _newDescription,
+                                                        editing: true,
+                                                        project:
+                                                            projects[index],
+                                                        taskIndex: taskIndex)
+                                                    .then(
+                                                  (value) {
+                                                    setState(() {});
+                                                  },
+                                                );
+                                              },
+                                            ),
                                           ]);
                                         },
                                       )
@@ -264,11 +298,6 @@ class _Projects extends State<Projects> {
                         users: newUsers.text.split(', '),
                         tasks: tasks,
                         id: id);
-
-                    newTitle.clear();
-                    newDescription.clear();
-                    newUsers.clear();
-                    Navigator.of(context).pop();
                   } else {
                     projectService.createProject(
                         title:
@@ -277,12 +306,70 @@ class _Projects extends State<Projects> {
                             ? 'No Title'
                             : newDescription.text,
                         users: newUsers.text.split(', '));
-
-                    newTitle.clear();
-                    newDescription.clear();
-                    newUsers.clear();
-                    Navigator.of(context).pop();
                   }
+                  newTitle.clear();
+                  newDescription.clear();
+                  newUsers.clear();
+                  Navigator.of(context).pop();
+                },
+                color: Theme.of(context).accentColor),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _addOrEditTask(
+      {newTitle: TextEditingController,
+      newDescription: TextEditingController,
+      editing: bool,
+      project: Project,
+      taskIndex: int}) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('${editing ? 'Edit' : 'Create'} Task'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Task Title',
+                  ),
+                  controller: newTitle,
+                ),
+                TextField(controller: newDescription)
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(
+                'Cancel',
+                style: TextStyle(color: Theme.of(context).primaryColor),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            RaisedButton(
+                child: Text('Submit',
+                    style: TextStyle(color: Theme.of(context).primaryColor)),
+                onPressed: () {
+                  if (editing) {
+                    projectService.editTask(
+                        title: newTitle.text,
+                        description: newDescription.text,
+                        project: project,
+                        taskIndex: taskIndex);
+                  } else {
+                    print('Creating task...');
+                  }
+
+                  newTitle.clear();
+                  newDescription.clear();
+                  Navigator.of(context).pop();
                 },
                 color: Theme.of(context).accentColor),
           ],
