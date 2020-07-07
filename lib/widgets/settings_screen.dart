@@ -19,7 +19,18 @@ class _Settings extends State<Settings> {
         title: Text('Settings'),
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Padding(
+            padding: EdgeInsets.only(left: 10),
+            child: RaisedButton(
+              color: Theme.of(context).accentColor,
+              onPressed: () {
+                logout();
+              },
+              child: Text('Logout'),
+            ),
+          ),
           Padding(
             padding: EdgeInsets.only(left: 10),
             child: Text(
@@ -28,16 +39,26 @@ class _Settings extends State<Settings> {
                   fontSize: 30, color: Theme.of(context).primaryColor),
             ),
           ),
-          RaisedButton(
-            color: Theme.of(context).accentColor,
-            onPressed: () {
-              deleteAccount();
-            },
-            child: Text('Delete Account'),
+          Padding(
+            padding: EdgeInsets.only(left: 10),
+            child: RaisedButton(
+              color: Theme.of(context).accentColor,
+              onPressed: () {
+                deleteAccount();
+              },
+              child: Text('Delete Account'),
+            ),
           ),
         ],
       ),
     );
+  }
+
+  Future<void> logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('id');
+    prefs.remove('jwt');
+    _notifyUser();
   }
 
   Future<void> deleteAccount() async {
